@@ -8,8 +8,10 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
+      - name: echo current dir
+        run: echo `pwd`
+
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
-        run: echo `pwd`
         with:
           workdir: src/module_a
