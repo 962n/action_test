@@ -15,5 +15,5 @@ jobs:
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
         with:
-          golangci_lint_flags: '--config=${GOLANGCI_PATH} ./...'
+          golangci_lint_flags: `--config=${GOLANGCI_PATH} ./...`
           workdir: src/module_a
