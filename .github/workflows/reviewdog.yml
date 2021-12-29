@@ -11,8 +11,11 @@ jobs:
       - name: echo current dir
         run: |
           CURRENT_PATH=`pwd`
+          echo ${CURRENT_PATH}
           echo "GOLANGCI_PATH=${CURRENT_PATH}/golangci.yml" >> $GITHUB_ENV
           echo ${GOLANGCI_PATH}
+      - name: env check
+        run: echo ${GOLANGCI_PATH}
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
         with:
