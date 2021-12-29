@@ -9,9 +9,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: echo current dir
-        run: echo `pwd`
-
+        run: |
+          CURRENT_PATH=`pwd`
+          echo "GOLANGCI_PATH=${CURRENT_PATH}/golangci.yml" >> $GITHUB_ENV
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
         with:
+          golangci_lint_flags: "--config=${GOLANGCI_PATH} ./..."
           workdir: src/module_a
