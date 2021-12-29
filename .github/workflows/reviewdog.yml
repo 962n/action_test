@@ -11,7 +11,7 @@ jobs:
       - name: find target module for golangci
         run: |
           echo "TARGET_MODULES=`find \`pwd\` | grep \"/go.mod\" | sed -e \"s/\/go.mod//\" `" >> $GITHUB_ENV
-          echo ${TARGET_MODULES}
+          echo `find \`pwd\` | grep \"/go.mod\" | sed -e \"s/\/go.mod//\" `
 
   golangci-lint:
     name: runner / golangci-lint
