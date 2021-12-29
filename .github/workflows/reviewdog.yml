@@ -10,12 +10,7 @@ jobs:
 
       - name: set golangci.yml path into env
         run: echo "GOLANGCI_YML=`pwd`/golangci.yml" >> $GITHUB_ENV
-#          CURRENT_PATH=`pwd`
-#          echo ${CURRENT_PATH}
-#          echo "GOLANGCI_PATH=${CURRENT_PATH}/golangci.yml" >> $GITHUB_ENV
-#          echo ${GOLANGCI_PATH}
-      - name: env check
-        run: echo ${GOLANGCI_YML}
+
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
         with:
