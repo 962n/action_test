@@ -5,8 +5,13 @@ jobs:
     name: setup / matrix
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
       - name: find target module for golangci
-        run: echo "TARGET_MODULES=`find \`pwd\` | grep \"/go.mod\" | sed -e \"s/\/go.mod//\" `" >> $GITHUB_ENV
+        run: |
+          echo "TARGET_MODULES=`find \`pwd\` | grep \"/go.mod\" | sed -e \"s/\/go.mod//\" `" >> $GITHUB_ENV
+          echo ${TARGET_MODULES}
 
   golangci-lint:
     name: runner / golangci-lint
