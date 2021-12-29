@@ -10,5 +10,6 @@ jobs:
 
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
+        run: echo `pwd`
         with:
           workdir: src/module_a
