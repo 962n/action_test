@@ -4,9 +4,11 @@
 array=`find \`pwd\` | grep "/go.mod" | sed -e "s/\/go.mod//" `
 CURRENT=`echo \`pwd\``
 
+echo $array
+
 for a in $array; do
   MOD_PATH=`echo $a`
   cd $MOD_PATH
-  echo `pwd`
-  golangci-lint run -c ${CURRENT}/golangci.yaml ./... | reviewdog -f=golangci-lint  -diff="git diff FETCH_HEAD"
+#  echo `pwd`
+#  golangci-lint run -c ${CURRENT}/golangci.yaml ./... | reviewdog -f=golangci-lint  -diff="git diff FETCH_HEAD"
 done

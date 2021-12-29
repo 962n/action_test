@@ -1,10 +1,20 @@
 name: reviewdog
 on: [pull_request]
 jobs:
+  setup-matrix:
+    name: setup / matrix
+    runs-on: ubuntu-latest
+    steps:
+      - name: find target module for golangci
+        run: echo "TARGET_MODULES=`find \`pwd\` | grep \"/go.mod\" | sed -e \"s/\/go.mod//\" `" >> $GITHUB_ENV
+
   golangci-lint:
     name: runner / golangci-lint
     runs-on: ubuntu-latest
     steps:
+      - name: hoge
+        run: echo ${{ env.TARGET_MODULES }}
+
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
