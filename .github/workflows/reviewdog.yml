@@ -22,6 +22,7 @@ jobs:
 
   golangci-lint:
     name: runner / golangci-lint
+    needs: set-matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
