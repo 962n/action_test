@@ -1,34 +1,52 @@
 name: reviewdog
 on: [pull_request]
 jobs:
-  setup-matrix:
-    name: setup / matrix
+  set-matrix:
     runs-on: ubuntu-latest
+    outputs:
+      target_paths: ${{ steps.set-matrix.outputs.value }}
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      - name: find target module for golangci
-        run: echo "TARGET_MODULES=`find \`pwd\` | grep \"/go.mod\" | sed -e \"s/\/go.mod//\" `" >> $GITHUB_ENV
+      - name: make values
+        id: set-matrix
+        run: |
+          paths=`find \`pwd\` -type f | grep "/go.mod" | sed -e "s/\/go.mod//" `
+          list=""
+          for path in $paths; do
+            list=`echo ${list}\"${path}\",`
+          done
+          list=`echo [${list/%?/}]`
+          echo "::set-output name=value::${list}"
 
-      - name: check
-        run: echo ${TARGET_MODULES}
-
-  golangci-lint:
-    name: runner / golangci-lint
+  execute:
+    needs: set-matrix
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        hoge: ${{fromJson(needs.set-matrix.outputs.target_paths)}}
     steps:
-      - name: hoge
-        run: echo ${{ env.TARGET_MODULES }}
+      - run: echo ${{ matrix.hoge }}
 
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
-
-      - name: set golangci.yml path into env
-        run: echo "GOLANGCI_YML=`pwd`/golangci.yml" >> $GITHUB_ENV
-
-      - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v2
-        with:
-          golangci_lint_flags: --config=${{ env.GOLANGCI_YML }} ./...
-          workdir: src/module_a
+#  golangci-lint:
+#    name: runner / golangci-lint
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        target_modules: ${{fromJson(needs.set-matrix.outputs.target_modules)}}
+#
+#    steps:
+#      - name: Check out code into the Go module directory
+#        uses: actions/checkout@v2
+#
+#      - name: set golangci.yml path into env
+#        run: echo "GOLANGCI_YML=`pwd`/golangci.yml" >> $GITHUB_ENV
+#
+#      - name: golangci-lint
+#        uses: reviewdog/action-golangci-lint@v2
+#        with:
+#          golangci_lint_flags: --config=${{ env.GOLANGCI_YML }} ./...
+#          workdir: ${{ matrix.target_modules }}
