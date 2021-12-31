@@ -20,16 +20,6 @@ jobs:
           list=`echo [${list/%?/}]`
           echo "::set-output name=value::${list}"
 
-#  execute:
-#    needs: set-matrix
-#    runs-on: ubuntu-latest
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        hoge: ${{fromJson(needs.set-matrix.outputs.target_modules)}}
-#    steps:
-#      - run: echo ${{ matrix.hoge }}
-
   golangci-lint:
     name: runner / golangci-lint
     runs-on: ubuntu-latest
@@ -50,3 +40,14 @@ jobs:
         with:
           golangci_lint_flags: --config=${{ env.GOLANGCI_YML }} ./...
           workdir: ${{ matrix.target_modules }}
+
+#  execute:
+#    needs: set-matrix
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        hoge: ${{fromJson(needs.set-matrix.outputs.target_modules)}}
+#    steps:
+#      - run: echo ${{ matrix.hoge }}
+
