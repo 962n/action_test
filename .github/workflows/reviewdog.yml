@@ -4,7 +4,7 @@ jobs:
   set-matrix:
     runs-on: ubuntu-latest
     outputs:
-      target_paths: ${{ steps.set-matrix.outputs.value }}
+      target_modules: ${{ steps.set-matrix.outputs.value }}
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
@@ -20,33 +20,33 @@ jobs:
           list=`echo [${list/%?/}]`
           echo "::set-output name=value::${list}"
 
-  execute:
-    needs: set-matrix
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        hoge: ${{fromJson(needs.set-matrix.outputs.target_paths)}}
-    steps:
-      - run: echo ${{ matrix.hoge }}
-
-#  golangci-lint:
-#    name: runner / golangci-lint
+#  execute:
+#    needs: set-matrix
 #    runs-on: ubuntu-latest
 #    strategy:
 #      fail-fast: false
 #      matrix:
-#        target_modules: ${{fromJson(needs.set-matrix.outputs.target_modules)}}
-#
+#        hoge: ${{fromJson(needs.set-matrix.outputs.target_modules)}}
 #    steps:
-#      - name: Check out code into the Go module directory
-#        uses: actions/checkout@v2
-#
-#      - name: set golangci.yml path into env
-#        run: echo "GOLANGCI_YML=`pwd`/golangci.yml" >> $GITHUB_ENV
-#
-#      - name: golangci-lint
-#        uses: reviewdog/action-golangci-lint@v2
-#        with:
-#          golangci_lint_flags: --config=${{ env.GOLANGCI_YML }} ./...
-#          workdir: ${{ matrix.target_modules }}
+#      - run: echo ${{ matrix.hoge }}
+
+  golangci-lint:
+    name: runner / golangci-lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target_modules: ${{fromJson(needs.set-matrix.outputs.target_modules)}}
+
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: set golangci.yml path into env
+        run: echo "GOLANGCI_YML=`pwd`/golangci.yml" >> $GITHUB_ENV
+
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v2
+        with:
+          golangci_lint_flags: --config=${{ env.GOLANGCI_YML }} ./...
+          workdir: ${{ matrix.target_modules }}
