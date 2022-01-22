@@ -34,7 +34,7 @@ jobs:
         run: |
           cd ${WORKING_DIR}
           export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
-          find . -type f -name go.mod -execdir golangci-lint run --config=${{ env.GOLANGCI_YML }} ./... \; \
+          find . -type f -name go.mod -execdir golangci-lint run --out-format=line-number --config=${{ env.GOLANGCI_YML }} ./... \; \
           | reviewdog -f=golangci-lint \
             -name=golangci-lint \
             -reporter=github-pr-check \
