@@ -20,7 +20,7 @@ jobs:
         run: |
           go env | grep PATH
           reviewdog --version
-          ls ${GITHUB_WORKSPACE}/go
+          ls /home/runner/go/bin
 
       - name: Set config into env
         run: |
