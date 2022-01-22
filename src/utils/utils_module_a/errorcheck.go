@@ -19,3 +19,7 @@ func UnhandledError2() {
 	GenerateError()
 }
 
+func UnhandledError3() {
+	fmt.Println("this method do not handle error")
+	GenerateError()
+}
