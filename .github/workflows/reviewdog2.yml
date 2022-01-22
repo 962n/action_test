@@ -13,16 +13,17 @@ jobs:
         with:
           go-version: '1.17'
 
-      - name: Install golangci-lint
+      - name: Install reviewdo
         run: wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ v0.13.0
 
-      - name: Install reviewdog
+      - name: Install golangci-lint
         run: wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.43.0
 
       - name: Install check
         run: |
-          golangci-lint --version
+          go env | grep PATH
           reviewdog --version
+          golangci-lint --version
 
       - name: Set config into env
         run: |
