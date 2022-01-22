@@ -23,7 +23,7 @@ jobs:
         run: |
           go env | grep PATH
           reviewdog --version
-          /go/bin/golangci-lint --version
+          ls ${GITHUB_WORKSPACE}/go
 
       - name: Set config into env
         run: |
