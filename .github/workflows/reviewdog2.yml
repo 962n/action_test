@@ -43,7 +43,7 @@ jobs:
           cd ${WORKING_DIR}
           cat reviewdog_report.txt | reviewdog -f=golangci-lint \
               -name=golangci-lint \
-              -reporter=github-pr-review \
+              -reporter=github-pr-check \
               -filter-mode=added \
               -fail-on-error=false \
               -level=error
