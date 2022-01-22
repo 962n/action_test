@@ -27,6 +27,7 @@ jobs:
 
       - name: hoge
         run: |
+          cd ${WORKING_DIR{
           export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
           find . -type f -name go.mod -execdir golangci-lint run --config=${{ env.GOLANGCI_YML }} ./... \; \
           | reviewdog -efm="%f:%l:%c: %m" \
