@@ -30,6 +30,9 @@ jobs:
           cd ${WORKING_DIR}
           paths=`find . -type f | grep "/go.mod" | sed -e "s/\/go.mod//" `
           for path in $paths; do
+            echo $path
+          done
+          for path in $paths; do
             cd $path
             golangci-lint run --out-format=line-number --config=${{ env.GOLANGCI_YML }} ./... \; \
             | reviewdog -f=golangci-lint \
