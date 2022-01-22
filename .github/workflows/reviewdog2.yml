@@ -1,0 +1,49 @@
+name: reviewdog
+on: [pull_request]
+jobs:
+  golangci-lint:
+    name: runner / golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Setup golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17'
+
+      - name: Install reviewdog
+        run: wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh| sh -s -- -b /usr/local/bin/ v0.13.0
+
+      - name: Install golangci-lint
+        run: curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.43.0
+
+      - name: Set config into env
+        run: |
+          echo "GOLANGCI_YML=`pwd`/golangci.yml" >> $GITHUB_ENV
+          echo "WORKING_DIR=`pwd`/src" >> $GITHUB_ENV
+
+      - name: Execute reviewdog with golangci-lint
+        run: |
+          # test
+          export REVIEWDOG_GITHUB_API_TOKEN="${{ secrets.github_token }}"
+          # fuga
+          paths=`find ${WORKING_DIR} -type f | grep "/go.mod" | sed -e "s/\/go.mod//" `
+          ## hoge
+          for path in $paths; do
+            cd $path
+            prefix=`echo $path | sed -e "s@${WORKING_DIR}/@@g"`
+            golangci-lint run \
+              --out-format=line-number \
+              --path-prefix=${prefix} \
+              --config=${{ env.GOLANGCI_YML }} \
+              ./...  >> ${WORKING_DIR}/reviewdog_report.txt || true
+          done
+          cd ${WORKING_DIR}
+          cat reviewdog_report.txt | reviewdog -f=golangci-lint \
+              -name=golangci-lint \
+              -reporter=github-pr-check \
+              -filter-mode=added \
+              -fail-on-error=false \
+              -level=error

@@ -1,0 +1,31 @@
+run:
+  test: true
+  allow-parallel-runners: true
+
+linters:
+  disable-all: true
+  enable:
+    - deadcode
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - structcheck
+    - typecheck
+    - unused
+    - varcheck
+    - gofmt
+    - gosec
+
+linters-settings:
+  errcheck:
+    exclude-functions:
+      - fmt.Fprint
+  gosec:
+    excludes:
+      - G404
+  govet:
+    check-shadowing: true
+  gofmt:
+    simplify: false
