@@ -36,7 +36,7 @@ jobs:
             cd $path
             prefix=`echo $path | sed -e "s@${WORKING_DIR}/@@g"`
             echo $prefix
-            golangci-lint run --out-format=line-number --path-prefix=${prefix} --config=${{ env.GOLANGCI_YML }} ./... \; >> ${WORKING_DIR}/reviewdog_report.txt
+            golangci-lint run --out-format=line-number --path-prefix=${prefix} --config=${{ env.GOLANGCI_YML }} ./...  >> ${WORKING_DIR}/reviewdog_report.txt
           done
           cd ${WORKING_DIR}
           cat reviewdog_report.txt | reviewdog -f=golangci-lint \
