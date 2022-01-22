@@ -26,6 +26,7 @@ jobs:
 
       - name: Execute reviewdog with golangci-lint
         run: |
+          echo hoge >> hoge.txt
           export REVIEWDOG_GITHUB_API_TOKEN="${{ secrets.github_token }}"
           echo ${WORKING_DIR}
           paths=`find ${WORKING_DIR} -type f | grep "/go.mod" | sed -e "s/\/go.mod//" `
