@@ -36,8 +36,11 @@ jobs:
             cd $path
             prefix=`echo $path | sed -e "s@${WORKING_DIR}/@@g"`
             echo $prefix
-            golangci-lint run --out-format=line-number --path-prefix=${prefix} --config=${{ env.GOLANGCI_YML }} ./...
-            echo golangcilintran
+            golangci-lint run \
+              --out-format=line-number \
+              --path-prefix=${prefix} \
+              --config=${{ env.GOLANGCI_YML }} \
+              ./...  >> ${WORKING_DIR}/reviewdog_report.txt || true
           done
           echo ${WORKING_DIR}
           cd ${WORKING_DIR}
@@ -48,7 +51,6 @@ jobs:
               -fail-on-error=false \
               -level=error
 
-#            golangci-lint run --out-format=line-number --path-prefix=${prefix} --config=${{ env.GOLANGCI_YML }} ./...  >> ${WORKING_DIR}/reviewdog_report.txt
 
 #      - name: Execute reviewdog with golangci-lint
 #        run: |
