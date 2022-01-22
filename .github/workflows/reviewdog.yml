@@ -42,13 +42,3 @@ jobs:
           golangci_lint_flags: --config=${{ env.GOLANGCI_YML }} ./...
           workdir: ${{ matrix.target_modules }}
 
-#  execute:
-#    needs: set-matrix
-#    runs-on: ubuntu-latest
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        hoge: ${{fromJson(needs.set-matrix.outputs.target_modules)}}
-#    steps:
-#      - run: echo ${{ matrix.hoge }}
-
