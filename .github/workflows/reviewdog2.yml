@@ -31,7 +31,7 @@ jobs:
           find . -type f -name go.mod -execdir golangci-lint run --config=${{ env.GOLANGCI_YML }} ./... \
           | reviewdog -efm="%f:%l:%c: %m" \
             -name="golangci-lint" \
-            -reporter="-github-pr-check" \;
+            -reporter="github-pr-check" \;
 
 #          if [ -n "${GITHUB_WORKSPACE}" ] ; then
 #            cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit
