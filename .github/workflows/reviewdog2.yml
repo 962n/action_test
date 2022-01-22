@@ -24,23 +24,23 @@ jobs:
           echo "GOLANGCI_YML=`pwd`/golangci.yml" >> $GITHUB_ENV
           echo "WORKING_DIR=`pwd`/src" >> $GITHUB_ENV
 
-      - name: Execute reviewdog with golangci-lint
-        run: |
-          export REVIEWDOG_GITHUB_API_TOKEN="${{ secrets.github_token }}"
-          paths=`find ${WORKING_DIR} -type f | grep "/go.mod" | sed -e "s/\/go.mod//" `
-          for path in $paths; do
-            echo $path
-          done
-          for path in $paths; do
-            cd $path
-            golangci-lint run --out-format=line-number --config=${{ env.GOLANGCI_YML }} ./... \; \
-            | reviewdog -f=golangci-lint \
-              -name=golangci-lint \
-              -reporter=github-pr-check \
-              -filter-mode=added \
-              -fail-on-error=false \
-              -level=error
-          done
+#      - name: Execute reviewdog with golangci-lint
+#        run: |
+#          export REVIEWDOG_GITHUB_API_TOKEN="${{ secrets.github_token }}"
+#          paths=`find ${WORKING_DIR} -type f | grep "/go.mod" | sed -e "s/\/go.mod//" `
+#          for path in $paths; do
+#            echo $path
+#          done
+#          for path in $paths; do
+#            cd $path
+#            golangci-lint run --out-format=line-number --config=${{ env.GOLANGCI_YML }} ./... \; \
+#            | reviewdog -f=golangci-lint \
+#              -name=golangci-lint \
+#              -reporter=github-pr-check \
+#              -filter-mode=added \
+#              -fail-on-error=false \
+#              -level=error
+#          done
 
 #      - name: Execute reviewdog with golangci-lint
 #        run: |
@@ -53,3 +53,15 @@ jobs:
 #            -filter-mode=added \
 #            -fail-on-error=false \
 #            -level=error
+
+      - name: Execute reviewdog with golangci-lint
+        run: |
+          cd ${WORKING_DIR}
+          export REVIEWDOG_GITHUB_API_TOKEN="${{ secrets.github_token }}"
+          find . -type f -name go.mod -execdir golangci-lint run --out-format=line-number --path-prefix $(PWD) --config=${{ env.GOLANGCI_YML }} ./... \; \
+          | reviewdog -f=golangci-lint \
+            -name=golangci-lint \
+            -reporter=github-pr-check \
+            -filter-mode=added \
+            -fail-on-error=false \
+            -level=error
