@@ -28,7 +28,6 @@ jobs:
         run: |
           echo hoge >> hoge.txt
           export REVIEWDOG_GITHUB_API_TOKEN="${{ secrets.github_token }}"
-          echo ${WORKING_DIR}
           paths=`find ${WORKING_DIR} -type f | grep "/go.mod" | sed -e "s/\/go.mod//" `
           for path in $paths; do
             echo $path
@@ -37,8 +36,11 @@ jobs:
             cd $path
             prefix=`echo $path | sed -e "s@${WORKING_DIR}/@@g"`
             echo $prefix
-            golangci-lint run --out-format=line-number --path-prefix=${prefix} --config=${{ env.GOLANGCI_YML }} ./...  >> ${WORKING_DIR}/reviewdog_report.txt
+#            golangci-lint run --out-format=line-number --path-prefix=${prefix} --config=${{ env.GOLANGCI_YML }} ./...  >> ${WORKING_DIR}/reviewdog_report.txt
+            golangci-lint run --out-format=line-number --path-prefix=${prefix} --config=${{ env.GOLANGCI_YML }} ./...
+            echo golangcilintran
           done
+          echo ${WORKING_DIR}
           cd ${WORKING_DIR}
           cat reviewdog_report.txt | reviewdog -f=golangci-lint \
               -name=golangci-lint \
