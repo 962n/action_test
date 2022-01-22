@@ -28,10 +28,15 @@ jobs:
       - name: hoge
         run: |
           export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
-          find . -type f -name go.mod -execdir golangci-lint run --config=${{ env.GOLANGCI_YML }} ./... \
+          find . -type f -name go.mod -execdir golangci-lint run --config=${{ env.GOLANGCI_YML }} ./... \; \
           | reviewdog -efm="%f:%l:%c: %m" \
             -name="golangci-lint" \
-            -reporter="github-pr-check" \;
+            -reporter="github-pr-check"
+
+#          find . -type f -name go.mod -execdir golangci-lint run --config=${{ env.GOLANGCI_YML }} ./... \
+#          | reviewdog -efm="%f:%l:%c: %m" \
+#            -name="golangci-lint" \
+#            -reporter="github-pr-check" \;
 
 #          if [ -n "${GITHUB_WORKSPACE}" ] ; then
 #            cd "${GITHUB_WORKSPACE}/${INPUT_WORKDIR}" || exit
