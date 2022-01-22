@@ -19,13 +19,18 @@ jobs:
       - name: Install reviewdog
         run: wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.43.0
 
+      - name: Install check
+        run: |
+          golangci-lint --version
+          reviewdog --version
+
       - name: Set config into env
         run: |
           echo "GOLANGCI_YML=`pwd`/golangci.yml" >> $GITHUB_ENV
           echo "INPUT_GITHUB_TOKEN=${{ secrets.github_token }}" >> $GITHUB_ENV
           echo "WORKING_DIR=`pwd`/src" >> $GITHUB_ENV
 
-      - name: hoge
+      - name: Execute reviewdog with golangci-lint
         run: |
           cd ${WORKING_DIR}
           export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
