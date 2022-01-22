@@ -35,9 +35,12 @@ jobs:
           cd ${WORKING_DIR}
           export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
           find . -type f -name go.mod -execdir golangci-lint run --config=${{ env.GOLANGCI_YML }} ./... \; \
-          | reviewdog -efm="%f:%l:%c: %m" \
-            -name="golangci-lint" \
-            -reporter="github-pr-check"
+          | reviewdog -f=golangci-lint \
+            -name=golangci-lint \
+            -reporter=github-pr-check \
+            -filter-mode=added \
+            -fail-on-error=false \
+            -level=error
 
 #          find . -type f -name go.mod -execdir golangci-lint run --config=${{ env.GOLANGCI_YML }} ./... \
 #          | reviewdog -efm="%f:%l:%c: %m" \
